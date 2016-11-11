@@ -1,5 +1,3 @@
-# Orienteering/src/main/resources/application.properties
-
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -17,7 +15,7 @@ Orienteering/target/*
 .directory
 Orienteering/.directory
 Orienteering/.idea/*
-Orienteering/src/main/resources/application.properties
+# Orienteering/src/main/resources/application.properties
 
 #erd
 *.bak
