@@ -21,7 +21,7 @@ public class Category extends BaseEntity<Long> {
     @Id
     @Getter @Setter
     @GeneratedValue
-    @Column(name = "idcategory")
+    @Column(columnDefinition = "INT")
     private Long id;
 
     @Getter @Setter

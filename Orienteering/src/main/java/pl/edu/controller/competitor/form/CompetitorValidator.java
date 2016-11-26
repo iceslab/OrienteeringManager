@@ -23,18 +23,14 @@ public class CompetitorValidator extends CommonValidator {
 		if (StringUtils.isBlank(form.getCompetitor().getName())) {
 			errors.rejectValue("competitor.name", "competitor.name.cannot.be.null");
 		}
-        if (StringUtils.isBlank(form.getCompetitor().getSurname())) {
-            errors.rejectValue("competitor.surname", "competitor.surname.cannot.be.null");
+        if (form.getCompetitor().getBirthDate() == null) {
+            errors.rejectValue("competitor.birth_date", "competitor.birth_date.cannot.be.null");
         }
-        if (form.getCompetitor().getBirthYear() == null) {
-            errors.rejectValue("competitor.birth_year", "competitor.birth_year.cannot.be.null");
-        }
-        if (form.getCompetitor().getGender() != 'F' ||
-            form.getCompetitor().getGender() != 'M') {
+        if (form.getCompetitor().getGender() == null) {
             errors.rejectValue("competitor.gender", "competitor.gender.must.be.m.or.f");
         }
-        if (form.getCompetitor().getCategory() == null) {
-            errors.rejectValue("competitor.category", "competitor.category.cannot.be.null");
+        if (form.getCompetitor().getCategoryId() == null) {
+            errors.rejectValue("competitor.category_id", "competitor.category_id.cannot.be.null");
         }
 	}
 }

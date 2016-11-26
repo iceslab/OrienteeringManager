@@ -1,13 +1,16 @@
 package pl.edu.controller.home;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import pl.edu.controller.BaseController;
 import pl.edu.controller.competitor.form.CompetitorOptionsList;
 import pl.edu.model.accommodation.reservation.AccommodationReservation;
 import pl.edu.model.catering.reservation.CateringReservation;
+import pl.edu.model.club.Club;
 import pl.edu.model.competition.CompetitionInfo;
+import pl.edu.model.competitor.Competitor;
 import pl.edu.repository.accommodation.reservation.AccommodationReservations;
 import pl.edu.repository.catering.reservation.CateringReservations;
 import pl.edu.repository.competition.CompetitionInfos;
@@ -19,6 +22,7 @@ import pl.edu.service.competition.ICompetitionInfoService;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -124,4 +128,42 @@ public class BaseHomeController extends BaseController {
             e.printStackTrace();
         }
     }
+
+    protected List<String> exportCompetitors(List<Club> relays){
+        List<String> retVal = new ArrayList<>();
+        boolean first = true;
+        for (Club relay : relays)
+        {
+            for(Competitor competitor : relay.getCompetitors())
+            {
+                final int categoryPad = 9;
+                final int namePad = 24;
+                final int clubPad = 3;
+                final int emptyPad = 15;
+
+                String newline = first ? "" : "\n";
+                String category = StringUtils.rightPad(competitor.getCategory().getName().toUpperCase(), categoryPad);
+                String name = StringUtils.rightPad(competitor.getName(),namePad);
+                String club = StringUtils.rightPad(relay.getName().toUpperCase(), clubPad);
+                String empty = StringUtils.rightPad("",emptyPad);
+
+                category = category.substring(0, categoryPad);
+                name = name.substring(0, namePad);
+                club = club.substring(0, clubPad);
+
+                String line = String.format("%s%s %s %s %s", newline, category, name, club, empty);
+                retVal.add(line);
+                first = false;
+            }
+        }
+        return retVal;
+    }
+
+    protected byte[] stringListToByteArray(List<String> strings){
+        StringBuilder sb = new StringBuilder();
+        for(String str : strings)
+            sb.append(str);
+        return sb.toString().getBytes(Charset.forName("UTF-8"));
+    }
+
 }

@@ -1,8 +1,14 @@
 package pl.edu.controller.home.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +22,7 @@ import pl.edu.model.accommodation.Accommodation;
 import pl.edu.model.accommodation.reservation.AccommodationReservation;
 import pl.edu.model.catering.Catering;
 import pl.edu.model.catering.reservation.CateringReservation;
+import pl.edu.model.club.Club;
 import pl.edu.model.competition.CompetitionInfo;
 import pl.edu.model.competitor.Competitor;
 import pl.edu.repository.accommodation.Accommodations;
@@ -34,7 +41,9 @@ import pl.edu.service.catering.reservation.ICateringReservationService;
 import pl.edu.service.club.IClubService;
 import pl.edu.service.competition.ICompetitionInfoService;
 import pl.edu.service.competitor.ICompetitorService;
-import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -135,4 +144,26 @@ public class AdminHomeController extends BaseHomeController{
         System.out.println("Save competitor");
         saveCompetitorToDB(jsonString);
     }
+
+    @RequestMapping(value = {"/admin/export_list", "/admin/export_list"}, method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> export_list(HttpServletResponse response) {
+        List<Club> relays = clubService.list(Clubs.findAll());
+        relays.removeIf(relay -> relay.getId() == 0);
+
+        for(Club relay : relays){
+            relay.setCompetitors(competitorService.list(Competitors.findAll().withClub(relay)));
+        }
+
+        byte[] bytesArray = stringListToByteArray(exportCompetitors(relays));
+        InputStream is = new ByteArrayInputStream(bytesArray);
+
+        HttpHeaders respHeaders = new HttpHeaders();
+        respHeaders.setContentType(MediaType.TEXT_PLAIN);
+        respHeaders.setContentLength(bytesArray.length);
+        respHeaders.setContentDispositionFormData("attachment", "starting_list.txt");
+
+        InputStreamResource isr = new InputStreamResource(is);
+        return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
+    }
+
 }

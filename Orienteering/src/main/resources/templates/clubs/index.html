@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text">
-                    <h1>Orientering manager</h1>
+                    <h1>Orienteering manager</h1>
                 </div>
             </div>
             <div class="row">
@@ -32,10 +32,9 @@
                         <table style="margin-bottom: 20px;">
                             <tr>
                                 <th>Edycja</th>
-                                <th>Imię</th>
-                                <th>Nazwisko</th>
+                                <th>Imię i nazwisko</th>
                                 <th>Płeć</th>
-                                <th>Rok urodzenia</th>
+                                <th>Data urodzenia</th>
                                 <!-- <td th:each="day : ${days}" th:text="${day}"></td> -->
                             </tr>
                             <div th:each="comp : ${competitors}">
@@ -44,7 +43,6 @@
                                             <input type="checkbox" th:name="${night}" th:id="${night}"  />
                                         </td>
                                         <td th:id="${comp.id}" th:text="${comp.name}" onclick="toogle(this.id)"/>
-                                        <td th:id="${comp.id}" th:text="${comp.surname}" onclick="toogle(this.id)"/>
                                         <td th:id="${comp.id}" th:text="${comp.gender}" onclick="toogle(this.id)"/>
                                         <td th:id="${comp.id}" th:text="${comp.birthYear}" onclick="toogle(this.id)"/>
 
@@ -55,11 +53,10 @@
 
                                                 <input type="hidden" th:name="competitor.id" th:id="competitor.id" th:value="${comp.id}"/>
                                                 <input type="hidden" th:name="competitor.name" th:id="competitor.name" th:value="${comp.name}"/>
-                                                <input type="hidden" th:name="competitor.surname" th:id="competitor.surname" th:value="${comp.surname}"/>
                                                 <input type="hidden" th:name="competitor.licenceNumber" th:id="competitor.licenceNumber" th:value="${comp.licenceNumber}"/>
                                                 <input type="hidden" th:name="competitor.chipNumber" th:id="competitor.chipNumber" th:value="${comp.chipNumber}"/>
                                                 <input type="hidden" th:name="competitor.club" th:id="competitor.club" th:value="${comp.club}"/>
-                                                <input type="hidden" th:name="competitor.birthYear" th:id="competitor.birthYear" th:value="${comp.birthYear}"/>
+                                                <input type="hidden" th:name="competitor.birthDate" th:id="competitor.birthDate" th:value="${comp.birthDate}"/>
                                                 <input type="hidden" th:name="competitor.gender" th:id="competitor.gender" th:value="${comp.gender}"/>
                                                 <input type="hidden" th:name="competitor.category" th:id="competitor.category" th:value="${comp.category}"/>
                                                 <input type="hidden" th:name="competitor.clubId" th:id="competitor.clubId" th:value="${comp.clubId}"/>
@@ -114,7 +111,8 @@
 <script src="/assets/js/jquery-1.11.1.min.js"></script>
 <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="/assets/js/jquery.backstretch.min.js"></script>
-<script src="/assets/js/scripts/club/details.js"/>
+<script src="/assets/js/scripts/admin/details.js"/>
+<script src="/assets/js/scripts/background.js" />
 
 <!--[if lt IE 10]>
 <script src="/assets/js/placeholder.js"></script>

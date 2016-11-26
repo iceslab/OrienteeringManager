@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Orientering Manager - Rejestracja</title>
+    <title>Orienteering Manager - Formularz zawodnika</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600"> </link>
@@ -41,24 +41,20 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 text">
-                    <h1>Orientering manager</h1>
+                    <h1>Orienteering manager</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3 form-box">
                     <div class="form-top">
-                        <h3>Rejestracja zawodnika</h3>
+                        <h3>Formularz zawodnika</h3>
                         <p>Wypełnij formularz:</p>
                     </div>
                     <div class="form-bottom contact-form">
                         <form role="form" th:action="@{/clubs/edit/competitor}" method="POST" th:object="${competitorForm}">
                             <div class="form-group only-club">
-                                <div>Imię</div>
-                                <input type="text" name="Name" th:field="*{competitor.name}" placeholder="Imię zawodnika" class="register-competitor-name form-control" id="register-competitor-name" />
-                            </div>
-                            <div class="form-group only-club">
-                                <div>Nazwisko</div>
-                                <input type="text" name="Surname" th:field="*{competitor.surname}" placeholder="Nazwisko zawodnika" class="register-competitor-surname form-control" id="register-competitor-surname" />
+                                <div>Imię i nazwisko</div>
+                                <input type="text" name="Name" th:field="*{competitor.name}" placeholder="Imię i nazwisko zawodnika" class="register-competitor-name form-control" id="register-competitor-name" />
                             </div>
                             <div class="form-group only-club">
                                 <div>Numer licencji</div>
@@ -66,11 +62,11 @@
                             </div>
                             <div class="form-group only-club">
                                 <div>Numer chipa</div>
-                                <input type="text" name="chipNumber" th:field="*{competitor.chipNumber}" placeholder="Numer czipsa" class="register-competitor-chipNumber form-control" id="register-competitor-chipNumber" />
+                                <input type="text" name="chipNumber" th:field="*{competitor.chipNumber}" placeholder="Numer chipa" class="register-competitor-chipNumber form-control" id="register-competitor-chipNumber" />
                             </div>
                             <div class="form-group only-club">
-                                <div>Rok urodzenia</div>
-                                <select th:field="*{competitor.birthYear}" id="register-competitor-birthYear">
+                                <div>Data urodzenia</div>
+                                <select th:field="*{competitor.birthDate}" id="register-competitor-birthDate">
                                     <option th:each="i : ${#numbers.sequence( 1900, #dates.format(#dates.createNow(), 'yyyy'))}" th:text="${i}" th:value="${i}"></option>
                                 </select>
                             </div>

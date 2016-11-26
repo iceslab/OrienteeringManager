@@ -8,10 +8,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.edu.controller.BaseController;
+import pl.edu.model.club.Club;
 import pl.edu.model.competitor.Competitor;
+import pl.edu.model.punch.Punch;
+import pl.edu.model.result.Result;
 import pl.edu.model.user.Role;
+import pl.edu.repository.club.Clubs;
 import pl.edu.repository.competitor.Competitors;
+import pl.edu.repository.punch.Punches;
+import pl.edu.repository.result.Results;
+import pl.edu.service.club.IClubService;
 import pl.edu.service.competitor.ICompetitorService;
+import pl.edu.service.punch.IPunchService;
+import pl.edu.service.result.IResultService;
 import pl.edu.utils.RoleUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +34,17 @@ import java.util.List;
 
 @Controller("mainController")
 public class MainController extends BaseController {
+    @Autowired
+    private IPunchService punchService;
+
+    @Autowired
+    private IResultService resultService;
 
     @Autowired
     private ICompetitorService competitorService;
+
+    @Autowired
+    private IClubService clubService;
 
     @RequestMapping("/")
     public String homepage(ModelMap model) {
@@ -64,5 +81,43 @@ public class MainController extends BaseController {
 
         // Redirect to a proper page or show default homepage
         return RoleUtils.getHomeFromRole(effectiveRole);
+    }
+
+    @RequestMapping(value = {"/results", "/results/"})
+    public String results(){
+        String resultPage = "";
+
+        List<Club> relays = clubService.list(Clubs.findAll());
+        for(Club relay : relays){
+            List<Competitor> competitors = competitorService.list(Competitors.findAll().withClub(relay));
+            for(Competitor competitor : competitors){
+                Result result = resultService.uniqueObject(Results.findAll().withChip(competitor.getChipNumber()));
+                List<Punch> punches = punchService.list(Punches.findAll().withChip(competitor.getChipNumber()));
+
+                competitor.setResult(result);
+                competitor.setPunches(punches);
+            }
+            relay.setCompetitors(competitors);
+        }
+
+        ClassifyAll(relays);
+        return resultPage;
+    }
+
+    private void ClassifyAll(List<Club> relays){
+        ClassifyCompetitors(relays);
+        ClassifyRelays(relays);
+    }
+
+    private void ClassifyCompetitors(List<Club> relays){
+        for(Club relay : relays){
+            List<Competitor> competitors = relay.getCompetitors();
+            competitors.sort(Competitor::compareTo);
+            relay.setCompetitors(competitors);
+        }
+    }
+
+    private void ClassifyRelays(List<Club> relays){
+        relays.sort(Club::compareTo);
     }
 }

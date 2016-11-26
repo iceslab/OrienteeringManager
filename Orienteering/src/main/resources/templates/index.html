@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="utf-8" />
@@ -42,7 +41,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-sm-offset-2 text">
-                        <h1>Orientering manager</h1>
+                        <h1>Orienteering manager</h1>
                     </div>
                 </div>
                 <div class="row">
@@ -53,16 +52,14 @@
                         <div class="form-bottom">
                             <table class="my">
                                 <tr>
-                                    <th>Imię</th>
-                                    <th>Nazwisko</th>
+                                    <th>Imię i nazwisko</th>
                                     <th>Płeć</th>
-                                    <th>Rok urodzenia</th>
+                                    <th>Data urodzenia</th>
                                 </tr>
                                 <tr th:each="comp : ${competitors}">
                                     <td class="my" th:text="${comp.name}" />
-                                    <td class="my" th:text="${comp.surname}" />
                                     <td class="my" th:text="${comp.gender}" />
-                                    <td class="my" th:text="${comp.birthYear}" />
+                                    <td class="my" th:text="${#calendars.format(comp.birthDate, 'dd-MM-yyyy')}"/>
                                 </tr>
                             </table>
                             </div>

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "competiton_info")
+@Table(name = "competition_info")
 public class CompetitionInfo extends BaseEntity<Long> {
 
     private static final long serialVersionUID = -758076802868616147L;
@@ -18,8 +18,28 @@ public class CompetitionInfo extends BaseEntity<Long> {
     @Id
     @Getter
     @GeneratedValue
-    @Column(name = "idcompetiton_info")
+    @Column(name = "idcompetition_info", columnDefinition = "INT")
     private Long id;
+
+    @Getter	@Setter
+    @Column(name = "start_time")
+    private Date begin;
+
+    @Getter	@Setter
+    @Column(name = "started_at_time")
+    private Date beganAt;
+
+    @Getter	@Setter
+    @Column(name = "finished_at_time")
+    private Date end;
+
+    @Getter	@Setter
+    @Column
+    private String name;
+
+    @Getter @Setter
+    @Column(name = "course_type", columnDefinition = "INT")
+    private Long courseType;
 
     @Getter @Setter
     @Column
@@ -27,19 +47,7 @@ public class CompetitionInfo extends BaseEntity<Long> {
 
     @Getter	@Setter
     @Column
-    private String name;
-
-    @Getter	@Setter
-    @Column
     private String address;
-
-    @Getter	@Setter
-    @Column
-    private Date begin;
-
-    @Getter	@Setter
-    @Column
-    private Date end;
 
     @Getter	@Setter
     @Column(name = "entry_fee")

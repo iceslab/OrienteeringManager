@@ -19,14 +19,14 @@ public class CateringReservation extends BaseEntity<Long> {
     @Id
     @Getter
     @GeneratedValue
-    @Column(name = "idcatering_reservations")
+    @Column(name = "idcatering_reservations", columnDefinition = "INT")
     private Long id;
 
     @Getter @Setter
-    @Column(name = "idcatering_availabilities")
+    @Column(name = "idcatering_availabilities", columnDefinition = "INT")
     private Long cateringAvailabilityId;
 
     @Getter	@Setter
-    @Column(name = "idcompetitor")
+    @Column(name = "idcompetitor", columnDefinition = "INT")
     private Long competitorId;
 }

@@ -13,6 +13,7 @@ import pl.edu.model.club.Club;
 import pl.edu.repository.club.Clubs;
 import pl.edu.service.club.IClubService;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class AdminClubHomeController extends BaseController {
     @ModelAttribute("clubs")
     List<Club> clubs(){
         List<Club> clubList = clubService.list(Clubs.findAll());
+        clubList.removeIf(club -> club.getId() == 0);
         return clubList;
     }
 
@@ -51,7 +53,8 @@ public class AdminClubHomeController extends BaseController {
     @RequestMapping(value="/admin/club", method=RequestMethod.POST, params="action=delete")
     public String delete(@ModelAttribute("clubForm") ClubForm form,
                          BindingResult bindingResult) {
-        clubService.delete(form.getClub());
-        return "admin/index";
+        Club c = clubService.uniqueObject(Clubs.findAll().withId(form.getClub().getId()));
+        clubService.delete(c);
+        return "redirect:/admin/club";
     }
 }

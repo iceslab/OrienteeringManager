@@ -19,7 +19,7 @@ public class Accommodation extends BaseEntity<Long> {
     @Id
     @Getter @Setter
     @GeneratedValue
-    @Column(name = "idaccommodation")
+    @Column(name = "idaccommodation", columnDefinition = "INT")
     private Long id;
 
     @Getter @Setter
@@ -35,7 +35,7 @@ public class Accommodation extends BaseEntity<Long> {
     private String description;
 
     @Getter	@Setter
-    @Column
+    @Column(columnDefinition = "INT")
     private Long places;
 
     @Getter @Setter

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pl.edu.controller.BaseController;
 import pl.edu.controller.accommodation.form.AccommodationForm;
 import pl.edu.controller.catering.form.CateringForm;
+import pl.edu.controller.club.form.ClubValidator;
 import pl.edu.controller.competitor.form.CompetitorForm;
+import pl.edu.controller.competitor.form.CompetitorValidator;
 import pl.edu.model.category.Category;
 import pl.edu.model.club.Club;
 import pl.edu.repository.category.Categories;
@@ -63,13 +65,20 @@ public class AdminCompetitorController extends BaseController {
             method=RequestMethod.POST, params="action=save")
     public String saveCompetitor(@ModelAttribute("competitorForm") CompetitorForm form,
                                  BindingResult bindingResult) {
-        String resultView = "redirect:/admin";
-        try {
-            competitorService.saveOrUpdate(form.getCompetitor());
-        }catch(Exception e){
-            e.printStackTrace();
-            resultView = "/admin/edit/competitor_form";
+        String resultView = "/admin/edit/competitor_form";
+
+        CompetitorValidator validator = new CompetitorValidator();
+        validator.validate(form, bindingResult);
+        if(!validator.hasErrors())
+        {
+            try {
+                competitorService.saveOrUpdate(form.getCompetitor());
+                resultView = "redirect:/admin";
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
+
         return resultView;
     }
 

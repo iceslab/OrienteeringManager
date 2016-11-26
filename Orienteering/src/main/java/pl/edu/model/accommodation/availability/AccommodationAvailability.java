@@ -18,11 +18,11 @@ public class AccommodationAvailability extends BaseEntity<Long> {
     @Id
     @Getter
     @GeneratedValue
-    @Column(name = "idaccommodation_availabilities")
+    @Column(name = "idaccommodation_availabilities", columnDefinition = "INT")
     private Long id;
 
     @Getter @Setter
-    @Column(name = "idaccommodation")
+    @Column(name = "idaccommodation", columnDefinition = "INT")
     private Long accommodationId;
 
     @Getter	@Setter

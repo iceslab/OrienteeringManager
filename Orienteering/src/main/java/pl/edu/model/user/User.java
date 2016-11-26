@@ -24,7 +24,7 @@ public class User extends BaseEntity<Long> {
     @Id
     @Getter
     @GeneratedValue
-    @Column(name = "iduser")
+    @Column(name = "iduser", columnDefinition = "INT")
     private Long id;
 
     @Getter
@@ -42,7 +42,6 @@ public class User extends BaseEntity<Long> {
     private String type;
 
     @Getter	@Setter
-//    @Column(nullable=false, name = "idclub")
     @ManyToOne
     @JoinColumn(name="idclub",
             insertable=false, updatable=false,
