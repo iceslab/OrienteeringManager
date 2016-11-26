@@ -34,8 +34,7 @@ public class Punch extends BaseEntity<Long> {
     private long timestamp;
 
     @Getter @Setter
-    @Column
-    @Enumerated(EnumType.ORDINAL)
+    @Transient
     private Correctness correctness;
 
     // Counts number of punches of wanted type

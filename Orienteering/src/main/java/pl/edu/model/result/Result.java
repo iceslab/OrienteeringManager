@@ -25,15 +25,15 @@ public class Result extends BaseEntity<Long> {
     }
 
     @Getter @Setter
-    @Column
+    @Column(name = "start_time")
     private Long startTime;
 
     @Getter @Setter
-    @Column
+    @Column(name = "check_time")
     private Long checkTime;
 
     @Getter @Setter
-    @Column
+    @Column(name = "finish_time")
     private Long finishTime;
 
     public long getRunningTime()
