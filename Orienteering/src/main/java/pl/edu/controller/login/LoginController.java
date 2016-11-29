@@ -38,13 +38,11 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = { "/login", "/login/" })
     public String homepage() {
-        System.out.println("Homepage");
         return "login";
     }
 
     @RequestMapping(value = { "/login", "/login/" }, method = RequestMethod.POST)
     public String login(Model model, LoginForm loginForm, BindingResult result, HttpServletRequest request) {
-        System.out.println("POST Homepage");
         LoginValidator validator = new LoginValidator();
         validator.validate(loginForm, result);
         String resultView = "login";

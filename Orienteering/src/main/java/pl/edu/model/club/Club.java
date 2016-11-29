@@ -45,14 +45,8 @@ public class Club extends BaseEntity<Long> implements Comparable<Club>{
     private String clubNumber;
 
     @Getter @Setter
-    @Transient
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(name = "competitors",
-//            inverseJoinColumns =
-//            @JoinColumn(name = "relay_id",
-//                    referencedColumnName = "id",
-//                    insertable=false, updatable=false,
-//                    nullable=false))
+//    @Transient
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "club")
     private List<Competitor> competitors;
 
     @Getter	@Setter

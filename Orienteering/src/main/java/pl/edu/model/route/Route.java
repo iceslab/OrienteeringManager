@@ -2,12 +2,13 @@ package pl.edu.model.route;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import pl.edu.model.BaseEntity;
+import pl.edu.model.routestep.RouteStep;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Bartosz on 2016-11-26.
@@ -27,4 +28,9 @@ public class Route extends BaseEntity<Long> {
     @Getter @Setter
     @Column
     private Long category;
+
+    @Getter @Setter
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "routeId")
+    private List<RouteStep> routeSteps;
 }

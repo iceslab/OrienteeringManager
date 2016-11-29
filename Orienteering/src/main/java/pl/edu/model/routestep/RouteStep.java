@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "route_steps")
-public class RouteStep extends BaseEntity<Long> {
+public class RouteStep extends BaseEntity<Long> implements Comparable<RouteStep>{
     @Id
     @Getter @Setter
     @Column
@@ -49,5 +49,10 @@ public class RouteStep extends BaseEntity<Long> {
         }
 
         return dict;
+    }
+
+    @Override
+    public int compareTo(RouteStep other) {
+        return order.compareTo(other.order);
     }
 }

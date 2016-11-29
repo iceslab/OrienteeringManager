@@ -19,17 +19,17 @@ public abstract class Punches extends Queryable<Punch, Long> {
 	protected Punches() {
 	}
 
-	public Punches withChip(long chip) {
+	public Punches withChip(Long chip) {
 		this.chip = chip;
 		return this;
 	}
 
-    public Punches withCode(long code) {
+    public Punches withCode(Long code) {
         this.code = code;
         return this;
     }
 
-    public Punches withTimestamp(long timestamp) {
+    public Punches withTimestamp(Long timestamp) {
         this.timestamp = timestamp;
         return this;
     }

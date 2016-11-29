@@ -2,11 +2,10 @@ package pl.edu.model.competitor;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import pl.edu.model.BaseEntity;
 import pl.edu.model.accommodation.availability.AccommodationAvailability;
-import pl.edu.model.accommodation.reservation.AccommodationReservation;
 import pl.edu.model.category.Category;
 import pl.edu.model.catering.availability.CateringAvailability;
 import pl.edu.model.club.Club;
@@ -15,17 +14,6 @@ import pl.edu.model.punch.Punch;
 import pl.edu.model.result.Result;
 import pl.edu.model.route.Route;
 import pl.edu.model.routestep.RouteStep;
-import pl.edu.repository.category.Categories;
-import pl.edu.repository.route.Routes;
-import pl.edu.repository.routestep.RouteSteps;
-import pl.edu.service.category.ICategoryService;
-import pl.edu.service.category.impl.CategoryService;
-import pl.edu.service.punch.IPunchService;
-import pl.edu.service.punch.impl.PunchService;
-import pl.edu.service.route.IRouteService;
-import pl.edu.service.route.impl.RouteService;
-import pl.edu.service.routestep.IRouteStepService;
-import pl.edu.service.routestep.impl.RouteStepService;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -34,106 +22,110 @@ import java.util.Set;
 
 @Entity
 @Table(name = "competitors")
-public class Competitor extends BaseEntity<Long> implements Comparable<Competitor>{
+public class Competitor extends BaseEntity<Long> implements Comparable<Competitor> {
 
     private static final long serialVersionUID = -758076802868616147L;
-
-    public Competitor(){}
-
-    @Autowired
-    @Transient
-    IPunchService punchService;
-
-    @Autowired
-    @Transient
-    ICategoryService categoryService;
-
-    @Autowired
-    @Transient
-    IRouteService routeService;
-
-    @Autowired
-    @Transient
-    IRouteStepService routeStepService;
-
     @Id
-    @Getter @Setter
+    @Getter
+    @Setter
     @GeneratedValue
     @Column(columnDefinition = "INT")
     private Long id;
-
-    @Getter @Setter
+    @Getter
+    @Setter
     @Column
     private String name;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @Column(name = "licence_number")
     private String licenceNumber;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @Column(name = "chip", columnDefinition = "INT")
     private Long chipNumber;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @ManyToOne
-    @JoinColumn(name="relay_id",
-            insertable=false, updatable=false,
-            nullable=false)
+    @JoinColumn(name = "relay_id",
+            insertable = false, updatable = false,
+            nullable = false)
     private Club club;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @Column(name = "relay_id", columnDefinition = "INT")
     private Long clubId;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @Column(name = "birth_date")
     private Date birthDate;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @Column(columnDefinition = "BIGINT")
     @Enumerated(EnumType.ORDINAL)
     private Gender gender;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
 //    @Column
     @ManyToOne
-    @JoinColumn(name="category",
-            insertable=false, updatable=false,
-            nullable=false)
+    @JoinColumn(name = "category",
+            insertable = false, updatable = false,
+            nullable = false)
     private Category category;
-
-    @Getter	@Setter
+    @Getter
+    @Setter
     @Column(name = "category", columnDefinition = "INT")
     private Long categoryId;
-
-    @Getter @Setter
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "accommodation_reservations", joinColumns = {
-            @JoinColumn(name = "idcompetitor", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "idaccommodation_availabilities",
+            @JoinColumn(name = "idcompetitor", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "idaccommodation_availabilities",
                     nullable = false, updatable = false)
-    })
+            })
     private Set<AccommodationAvailability> accommodationAvailabilities;
-
-    @Getter @Setter
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "catering_reservations", joinColumns = {
-            @JoinColumn(name = "idcompetitor", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "idcatering_availabilities",
+            @JoinColumn(name = "idcompetitor", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "idcatering_availabilities",
                     nullable = false, updatable = false)
             })
     private Set<CateringAvailability> cateringAvailabilities;
-
-    @Getter @Setter
-    @Transient
+    @Getter
+    @Setter
+//    @Transient
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chip")
+//    @JoinTable(name = "punches",
+//            joinColumns = {@JoinColumn(name = "chip")},
+//            inverseJoinColumns = {@JoinColumn(name = "chip")})
+//    @JoinColumn(name = "chip")
     private List<Punch> punches;
-
-    @Getter @Setter
-    @Transient
+    @Getter
+    @Setter
+//    @Transient
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToOne
+    @JoinColumn(name = "chip", insertable = false, updatable = false)
     private Result result;
 
-    @Transient
-    private long goodCollections;
+    public Competitor() {
+    }
+
+    public List<RouteStep> getRouteSteps() {
+        return getCategory().getRoute().getRouteSteps();
+    }
+
+    public void setRouteSteps(List<RouteStep> routeSteps) {
+        Route route = category.getRoute();
+        route.setRouteSteps(routeSteps);
+        category.setRoute(route);
+    }
+
     public long getGoodCollections() {
         long retVal = 0;
         retVal += getCorrectPunches();
@@ -141,8 +133,6 @@ public class Competitor extends BaseEntity<Long> implements Comparable<Competito
         return retVal;
     }
 
-    @Transient
-    private long wrongCollections;
     public long getWrongCollections() {
         long retVal = 0;
         retVal += getInvalidPunches();
@@ -150,67 +140,34 @@ public class Competitor extends BaseEntity<Long> implements Comparable<Competito
         return retVal;
     }
 
-    @Transient
-    private Long notCheckedPunches;
     private Long getNotCheckedPunches() {
-        if (notCheckedPunches == null && getPunches() != null)
-        {
-            notCheckedPunches = Punch.getNoOfCorrectnessPunches(
-                    getPunches(),
-                    Correctness.NOT_CHECKED);
-        }
-        return notCheckedPunches;
+        return Punch.getNoOfCorrectnessPunches(
+                getPunches(),
+                Correctness.NOT_CHECKED);
     }
 
-    @Transient
-    private Long correctPunches;
     private Long getCorrectPunches() {
-        if (correctPunches == null && getPunches() != null)
-        {
-            correctPunches = Punch.getNoOfCorrectnessPunches(
-                    getPunches(),
-                    Correctness.CORRECT);
-        }
-        return correctPunches;
+        return Punch.getNoOfCorrectnessPunches(
+                getPunches(),
+                Correctness.CORRECT);
     }
 
-    @Transient
-    private Long presentPunches;
     private Long getPresentPunches() {
-        if (presentPunches == null && getPunches() != null)
-        {
-            presentPunches = Punch.getNoOfCorrectnessPunches(
-                    getPunches(),
-                    Correctness.PRESENT);
-        }
-        return presentPunches;
+        return Punch.getNoOfCorrectnessPunches(
+                getPunches(),
+                Correctness.PRESENT);
     }
 
-    @Transient
-    private Long invalidPunches;
     private Long getInvalidPunches() {
-        if (invalidPunches == null && getPunches() != null)
-        {
-            invalidPunches = Punch.getNoOfCorrectnessPunches(
-                    getPunches(),
-                    Correctness.INVALID);
-        }
-        return invalidPunches;
+        return Punch.getNoOfCorrectnessPunches(
+                getPunches(),
+                Correctness.INVALID);
     }
 
-    @Transient
-    private Long notPresentPunches;
     private Long getNotPresentPunches() {
-        if (notPresentPunches == null) {
-            Category category = categoryService.uniqueObject(Categories.findAll().withId(getCategoryId()));
-            Route route = routeService.uniqueObject(Routes.findAll().withCategory(category.getId()));
-            List<RouteStep> routeSteps = routeStepService.list(RouteSteps.findAll().withRouteId(route.getId()));
-
-            notPresentPunches = Punch.getNoOfNotPresentPunches(
-                    getPunches(),
-                    routeSteps);
-        }
-        return notPresentPunches;
+        return Punch.getNoOfNotPresentPunches(
+                getPunches(),
+                getRouteSteps());
     }
 
     @Override
@@ -223,18 +180,15 @@ public class Competitor extends BaseEntity<Long> implements Comparable<Competito
         Long rightPunches = right.getWrongCollections();
 
         // When right competitor made more mistakes
-        if (leftPunches < rightPunches)
-        {
+        if (leftPunches < rightPunches) {
             retVal = -1;
         }
         // When left competitor made more mistakes
-        else if (leftPunches > rightPunches)
-        {
+        else if (leftPunches > rightPunches) {
             retVal = 1;
         }
         // When competitors made the same amount of mistakes (this means none too)
-        else
-        {
+        else {
             long leftTime = left.getResult().getRunningTime();
             long rightTime = right.getResult().getRunningTime();
             // When left one ran longer

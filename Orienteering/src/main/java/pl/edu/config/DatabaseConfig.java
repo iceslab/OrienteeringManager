@@ -67,6 +67,9 @@ public class DatabaseConfig {
         additionalProperties.put(
                 "hibernate.hbm2ddl.auto",
                 env.getProperty("hibernate.hbm2ddl.auto"));
+        additionalProperties.put(
+                "log4j.logger.org.hibernate",
+                env.getProperty("log4j.logger.org.hibernate"));
         entityManagerFactory.setJpaProperties(additionalProperties);
 
         return entityManagerFactory;

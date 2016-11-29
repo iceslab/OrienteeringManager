@@ -2,17 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Orientering Manager - admin index</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600"> </link>
-    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"  />
-    <link rel="stylesheet" href="/assets/css/form-elements.css"> </link>
-    <link rel="stylesheet" href="/assets/css/style.css"> </link>
-    <link rel="stylesheet" href="/assets/css/table.css"> </link>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
+    </link>
+    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/assets/css/form-elements.css">
+    </link>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    </link>
+    <link rel="stylesheet" href="/assets/css/table.css">
+    </link>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,54 +27,67 @@
     <![endif]-->
 
 </head>
-    <body>
+<body>
 
-    <div th:replace="fragments/header :: header">
-        &nbsp;
-    </div>
+<div th:replace="fragments/header :: header">
+    &nbsp;
+</div>
 
-    <div class="top-content">
-        <div class="inner-bg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-8 col-sm-offset-2 text">
-                        <h1>Orienteering manager</h1>
-                    </div>
+<div class="top-content">
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-offset-2 text">
+                    <h1>Orienteering manager</h1>
                 </div>
-                <div class="row">
-                    <div class="col-md-8 col-sm-offset-2 text">
-                        <div class="form-top">
-                            <p>Wyniki zawodów</p>
-                        </div>
-                        <div class="form-bottom">
-                            <table class="my">
-                                <tr>
-                                    <th>Imię i nazwisko</th>
-                                    <th>Płeć</th>
-                                    <th>Data urodzenia</th>
-                                </tr>
-                                <tr th:each="comp : ${competitors}">
-                                    <td class="my" th:text="${comp.name}" />
-                                    <td class="my" th:text="${comp.gender}" />
-                                    <td class="my" th:text="${#calendars.format(comp.birthDate, 'dd-MM-yyyy')}"/>
-                                </tr>
-                            </table>
-                            </div>
-                        </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-sm-offset-2 text">
+                    <div class="form-top">
+                        <p>Wyniki zawodów</p>
+                    </div>
+                    <div class="form-bottom" th:each="relay : ${relays}">
+                        <table class="my">
+                            <tr>
+                                <th>Sztafeta</th>
+                                <th>Całkowity czas biegu</th>
+                            </tr>
+                            <tr>
+                                <td class="my" th:text="${relay.name}"/>
+                                <td class="my" th:text="${relay.overallRunningTime}"/>
+                            </tr>
+                        </table>
+                        <table class="my">
+                            <tr>
+                                <th>Imię i nazwisko</th>
+                                <th>Płeć</th>
+                                <th>Czas biegu</th>
+                                <th>Dobrze zebrane</th>
+                                <th>Źle zebrane</th>
+                            </tr>
+                            <tr th:each="comp : ${relay.competitors}">
+                                <td class="my" th:text="${comp.name}"/>
+                                <td class="my" th:text="${comp.gender}"/>
+                                <td class="my" th:text="${comp.result.runningTime}"/>
+                                <td class="my" th:text="${comp.goodCollections}"/>
+                                <td class="my" th:text="${comp.wrongCollections}"/>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
+<!-- Javascript -->
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.backstretch.min.js"></script>
+<script src="/assets/js/scripts/register.js"></script>
 
-    <!-- Javascript -->
-    <script src="/assets/js/jquery-1.11.1.min.js"></script>
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/assets/js/jquery.backstretch.min.js"></script>
-    <script src="/assets/js/scripts/register.js"></script>
-
-    <!--[if lt IE 10]>
-    <script src="assets/js/placeholder.js"></script>
-    <![endif]-->
-    </body>
+<!--[if lt IE 10]>
+<script src="assets/js/placeholder.js"></script>
+<![endif]-->
+</body>
 </html>
